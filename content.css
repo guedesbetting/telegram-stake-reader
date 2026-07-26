@@ -1,0 +1,90 @@
+.stake-reader-media-host {
+  position: relative !important;
+}
+
+.stake-reader-ui {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+  font-family: Arial, sans-serif;
+  z-index: 12;
+}
+
+.stake-reader-ui--overlay {
+  position: absolute;
+  display: flex;
+  max-width: calc(100% - 16px);
+  margin: 0;
+  padding: 5px;
+  border-radius: 10px;
+  background: rgba(13, 22, 31, 0.82);
+  box-sizing: border-box;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.stake-reader-ui--overlay[data-position="bottom-left"] {
+  left: 8px;
+  bottom: 8px;
+}
+
+.stake-reader-ui--overlay[data-position="bottom-right"] {
+  right: 8px;
+  bottom: 8px;
+}
+
+.stake-reader-ui--overlay[data-position="top-left"] {
+  left: 8px;
+  top: 8px;
+}
+
+.stake-reader-ui--overlay[data-position="top-right"] {
+  right: 8px;
+  top: 8px;
+}
+
+.stake-reader-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.stake-reader-chip {
+  border: 0;
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: #2aabee;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.stake-reader-chip:hover {
+  filter: brightness(1.08);
+}
+
+.stake-reader-result {
+  border-radius: 7px;
+  padding: 4px 8px;
+  background: rgba(20, 29, 38, 0.94);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.stake-reader-ui:not(.stake-reader-ui--overlay) .stake-reader-result {
+  background: rgba(42, 171, 238, 0.14);
+  color: inherit;
+}
+
+.stake-reader-ui + .stake-reader-ui {
+  display: none !important;
+}

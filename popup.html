@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stake Reader</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="panel">
+    <header>
+      <div class="brand"><img src="icons/icon48.png" alt="" width="42" height="42"></div>
+      <div>
+        <h1>Stake Reader</h1>
+        <p>Gestão para qualquer canal do Telegram Web.</p>
+      </div>
+    </header>
+
+    <label for="bankroll">Banca atual</label>
+    <div class="money-field">
+      <span>R$</span>
+      <input id="bankroll" inputmode="decimal" placeholder="1000,00" autocomplete="off">
+    </div>
+
+    <label for="management">Gestão da banca</label>
+    <div class="unit-field">
+      <input id="management" inputmode="decimal" placeholder="100" autocomplete="off">
+      <span>unidades</span>
+    </div>
+
+    <div class="preview">
+      <span>Valor de 1u</span>
+      <strong id="unitValue">R$ 0,00</strong>
+    </div>
+
+    <label for="percentageMode">Como interpretar stakes em %</label>
+    <select id="percentageMode">
+      <option value="as-units">Usar o número como unidades</option>
+      <option value="literal">Percentual real da banca</option>
+    </select>
+    <p class="field-help" id="percentageHelp"></p>
+
+    <label for="overlayPosition">Posição sobre a imagem</label>
+    <select id="overlayPosition">
+      <option value="bottom-left">Inferior esquerdo</option>
+      <option value="bottom-right">Inferior direito</option>
+      <option value="top-left">Superior esquerdo</option>
+      <option value="top-right">Superior direito</option>
+    </select>
+
+    <label class="switch-row">
+      <input id="enabled" type="checkbox">
+      <span class="switch"></span>
+      <span>Ativar no Telegram Web</span>
+    </label>
+
+    <button id="save" type="button">Salvar configurações</button>
+    <p id="status" role="status" aria-live="polite"></p>
+
+    <footer class="popup-footer">
+      <small>O cálculo é local. Nenhuma mensagem ou valor é enviado para servidores.</small>
+      <p class="developer-credit">Desenvolvido por <strong>Guedes Betting</strong></p>
+    </footer>
+  </main>
+  <script src="stake.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

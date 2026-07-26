@@ -1,0 +1,39 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Testes Stake Reader</title>
+<pre id="output"></pre>
+<script src="../stake.js"></script>
+<script>
+const out = document.querySelector('#output');
+const cases = [
+  ['Stake: 1,5u', 'unit', 1.5],
+  ['Entrada 2 u', 'unit', 2],
+  ['Flat: 0.75 unidades', 'unit', 0.75],
+  ['Stake: 1,25%', 'percentage', 1.25],
+  ['1,74%', 'percentage', 1.74],
+  ['🍎 1,74%', 'percentage', 1.74],
+  ['🔴 2 %', 'percentage', 2],
+  ['EV 10%', null, null],
+  ['Odd 2.00 | Linha 2.5', null, null]
+];
+let failed = 0;
+for (const [text, type, value] of cases) {
+  const found = StakeReaderCore.findStakes(text)[0];
+  const ok = type === null ? !found : found?.type === type && found?.value === value;
+  out.textContent += `${ok ? 'PASS' : 'FAIL'} — ${text}\n`;
+  if (!ok) failed++;
+}
+const amount = StakeReaderCore.calculateStake({type:'unit', value:1.75}, 500, 150);
+const percentAsUnits = StakeReaderCore.calculateStake({type:'percentage', value:1.74}, 500, 80, 'as-units');
+const percentLiteral = StakeReaderCore.calculateStake({type:'percentage', value:1.74}, 500, 80, 'literal');
+const formatted = StakeReaderCore.formatBetValue(amount);
+out.textContent += `${formatted === '5,83' ? 'PASS' : 'FAIL'} — truncamento: ${formatted}\n`;
+if (formatted !== '5,83') failed++;
+const asUnitsFormatted = StakeReaderCore.formatBetValue(percentAsUnits);
+out.textContent += `${asUnitsFormatted === '10,87' ? 'PASS' : 'FAIL'} — 1,74% como unidades: ${asUnitsFormatted}\n`;
+if (asUnitsFormatted !== '10,87') failed++;
+const literalFormatted = StakeReaderCore.formatBetValue(percentLiteral);
+out.textContent += `${literalFormatted === '8,70' ? 'PASS' : 'FAIL'} — 1,74% literal: ${literalFormatted}\n`;
+if (literalFormatted !== '8,70') failed++;
+out.textContent += `\n${failed === 0 ? 'Todos os testes passaram.' : `${failed} teste(s) falharam.`}`;
+</script>

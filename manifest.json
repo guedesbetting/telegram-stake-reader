@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Stake Reader para Telegram",
   "short_name": "Stake Reader",
-  "version": "0.1.7",
-  "description": "Identifica stakes em unidades ou percentual no Telegram Web, permite interpretar % como unidades ou percentual real e mostra o cálculo sobre a imagem da aposta.",
+  "version": "0.1.8",
+  "description": "Identifica stakes em unidades ou percentual no Telegram Web sem interferir na reprodução de áudio ou vídeo.",
   "permissions": [
     "storage"
   ],

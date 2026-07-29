@@ -1,3 +1,10 @@
+## 0.1.8
+
+- Corrigida possível reprodução indevida de áudio em grupos com vídeos.
+- Removida a clonagem completa das mensagens durante a leitura de stakes.
+- A extensão agora percorre apenas nós de texto e ignora `video`, `audio`, `svg`, `script` e elementos próprios da interface.
+- Nenhum atributo de reprodução, volume, mute ou autoplay é alterado pela extensão.
+
 ## 0.1.7
 
 - Adicionado tutorial completo de download, instalação, configuração e uso.

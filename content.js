@@ -35,9 +35,41 @@ async function refreshSettings() {
 function getMessageText(element) {
   if (!(element instanceof HTMLElement)) return "";
 
-  const clone = element.cloneNode(true);
-  clone.querySelectorAll(`.${UI_CLASS}`).forEach((ui) => ui.remove());
-  return clone.innerText?.trim() ?? "";
+  /*
+   * Não clonamos a mensagem. Clonar elementos <video> ou <audio> pode
+   * recriar instâncias de mídia e interferir no autoplay/estado de áudio
+   * do Telegram Web. A leitura abaixo percorre somente nós de texto.
+   */
+  const walker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    {
+      acceptNode(node) {
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+
+        if (parent.closest(`.${UI_CLASS}`)) {
+          return NodeFilter.FILTER_REJECT;
+        }
+
+        if (parent.closest("video, audio, script, style, noscript, svg")) {
+          return NodeFilter.FILTER_REJECT;
+        }
+
+        const text = node.nodeValue?.trim();
+        return text ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    }
+  );
+
+  const parts = [];
+  let node;
+
+  while ((node = walker.nextNode())) {
+    parts.push(node.nodeValue.trim());
+  }
+
+  return parts.join(" ").replace(/\s+/g, " ").trim();
 }
 
 function containsRecognizedStake(element) {

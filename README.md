@@ -207,3 +207,7 @@ O Stake Reader é apenas uma ferramenta de cálculo. Ele não garante resultados
 Distribuído sob a licença MIT. Consulte [`LICENSE`](LICENSE).
 
 Desenvolvido por **Guedes Betting**.
+
+## Compatibilidade com áudio e vídeo
+
+O Stake Reader não inicia, pausa, silencia ou altera o volume das mídias do Telegram. A leitura das apostas é feita somente nos nós de texto das mensagens, ignorando elementos `video` e `audio`.

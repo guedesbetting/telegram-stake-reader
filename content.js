@@ -62,14 +62,36 @@ function getMessageText(element) {
     }
   );
 
-  const parts = [];
+  const lines = [];
+  let currentParent = null;
+  let currentLine = [];
   let node;
 
+  const flushLine = () => {
+    const line = currentLine.join(" ").replace(/[ \t]+/g, " ").trim();
+    if (line) lines.push(line);
+    currentLine = [];
+  };
+
   while ((node = walker.nextNode())) {
-    parts.push(node.nodeValue.trim());
+    const parent = node.parentElement;
+    if (!parent) continue;
+
+    /*
+     * Mantém textos do mesmo elemento na mesma linha e cria uma nova linha
+     * quando o Telegram troca o contêiner textual. Isso preserva formatos
+     * isolados como "🍎 1,74%" sem clonar a mensagem ou tocar na mídia.
+     */
+    if (currentParent && parent !== currentParent) {
+      flushLine();
+    }
+
+    currentParent = parent;
+    currentLine.push(node.nodeValue.trim());
   }
 
-  return parts.join(" ").replace(/\s+/g, " ").trim();
+  flushLine();
+  return lines.join("\n").trim();
 }
 
 function containsRecognizedStake(element) {

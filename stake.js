@@ -36,18 +36,37 @@
       add("percentage", value, match[0], match.index ?? 0);
     }
 
-    // Percentual isolado em uma linha, inclusive quando precedido somente por emoji.
-    // Exemplos reconhecidos: "1,74%", "🍎 1,74%", "🔴 2 %".
-    // Linhas como "EV 10%" ou "Cashback 5%" não são interpretadas automaticamente.
-    let lineOffset = 0;
-    for (const line of text.split(/\r?\n/)) {
-      const standalone = line.match(/^\s*[^\p{L}\p{N}%]*?\s*(\d+(?:[.,]\d+)?)\s*%\s*$/u);
-      if (standalone) {
-        const value = normalizeDecimal(standalone[1]);
-        const numberIndex = line.indexOf(standalone[1]);
-        add("percentage", value, line, lineOffset + Math.max(0, numberIndex));
+    // Percentuais enviados como stake, inclusive quando o Telegram separa
+    // emoji, número e símbolo em elementos HTML diferentes.
+    // Exemplos: "1,37%", "🍎 1,37%", "🔴\n1,37\n%".
+    // Termos estatísticos conhecidos são ignorados para reduzir falsos positivos.
+    const blockedPercentContext = /\b(?:ev|roi|yield|cashback|aproveitamento|taxa|probabilidade|margem|lucro|green|red|acerto|assertividade)\b/iu;
+    const compactText = text.replace(/[\t ]+/g, " ");
+    const loosePercentRegex = /(\d+(?:[.,]\d+)?)\s*(?:\n\s*)?%/gu;
+
+    for (const match of compactText.matchAll(loosePercentRegex)) {
+      const value = normalizeDecimal(match[1]);
+      const index = match.index ?? 0;
+      const lineStart = compactText.lastIndexOf("\n", index) + 1;
+      const nextBreak = compactText.indexOf("\n", index + match[0].length);
+      const lineEnd = nextBreak === -1 ? compactText.length : nextBreak;
+      const line = compactText.slice(lineStart, lineEnd).trim();
+
+      // Analisa também um pequeno contexto anterior, pois alguns layouts do
+      // Telegram colocam o rótulo e o percentual em elementos separados.
+      const contextStart = Math.max(0, index - 45);
+      const context = compactText.slice(contextStart, lineEnd);
+      if (blockedPercentContext.test(line) || blockedPercentContext.test(context)) {
+        continue;
       }
-      lineOffset += line.length + 1;
+
+      // Aceita linha sem palavras (emoji + percentual), contexto explícito de
+      // stake ou percentuais pequenos, padrão comum de gestão de apostas.
+      const hasLetters = /\p{L}/u.test(line);
+      const hasStakeContext = /\b(?:stake|entrada|risco|gest[aã]o|unidade|aposta)\b/iu.test(context);
+      if (!hasLetters || hasStakeContext || (value !== null && value <= 10)) {
+        add("percentage", value, match[0], index);
+      }
     }
 
     return results.sort((a, b) => a.index - b.index);

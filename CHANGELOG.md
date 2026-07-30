@@ -1,3 +1,15 @@
+## 0.1.10
+
+- Corrigida a leitura de percentuais como `🍎 1,37%` em layouts onde o Telegram separa emoji, número e `%` em nós diferentes.
+- Adicionado reconhecimento tolerante a quebras de linha entre o número e o símbolo `%`.
+- Mantidos filtros para evitar interpretar EV, ROI, cashback, aproveitamento e outras estatísticas como stake.
+
+## 0.1.9
+
+- Corrige a leitura de stakes em `%` após a correção de áudio da versão 0.1.8.
+- Preserva quebras entre contêineres de texto sem clonar mensagens.
+- Mantém vídeos e áudios completamente intocados.
+
 ## 0.1.8
 
 - Corrigida possível reprodução indevida de áudio em grupos com vídeos.
